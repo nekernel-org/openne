@@ -1,12 +1,12 @@
 <!-- README of NeKernel -->
 
-# New Kernel Architecture (NeKernel)
+# Open New Kernel Architecture (NeKernel)
 
 ## Brief
 
-NeKernel is designed for servers, desktop, mobile and workstations.
+Stripped down version of NeKernel for open-source purposes.
 
-## Screenshots:
+## Demo Screenshots:
 
 ![doc/apic.png](doc/apic.png)
 
@@ -22,8 +22,8 @@ NeKernel is designed for servers, desktop, mobile and workstations.
 Clone repository:
 
 ```
-git clone git@github.com:mediaswirl/nekernel.git
-cd kernel-services
+git clone git@github.com:mediaswirl/openne.git
+cd openne
 ```
 
 </br>
@@ -34,4 +34,4 @@ And then select the makefile (arm64 and amd64 are stable and EFI based) to execu
 make -f amd64-efi.make all
 ```
 
-###### Copyright (C) 2024, Amlal EL Mahrouss, all rights reserved. All rights reserved.
+###### Copyright (C) 2024-2025 Amlal EL Mahrouss, all rights reserved. All rights reserved.
