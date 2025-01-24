@@ -2,7 +2,15 @@
 
 # New Kernel Architecture (NeKernel)
 
+## Brief
+
 NeKernel is designed for servers, desktop, mobile and workstations.
+
+## Screenshots:
+
+![doc/apic.png](doc/apic.png)
+
+![doc/filesystem.png](doc/filesystem.png)
 
 ## Requirements
 
