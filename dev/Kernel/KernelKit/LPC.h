@@ -11,9 +11,9 @@
 /// @file LPC.h
 /// @brief Local Process Codes.
 
-#define err_local_ok()	 (Kernel::UserProcessScheduler::The().GetCurrentProcess().Leak().GetLocalCode() == Kernel::kErrorSuccess)
-#define err_local_fail() (Kernel::UserProcessScheduler::The().GetCurrentProcess().Leak().GetLocalCode() != Kernel::kErrorSuccess)
-#define err_local_get()	 (Kernel::UserProcessScheduler::The().GetCurrentProcess().Leak().GetLocalCode())
+#define err_local_ok()	 (Kernel::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode() == Kernel::kErrorSuccess)
+#define err_local_fail() (Kernel::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode() != Kernel::kErrorSuccess)
+#define err_local_get()	 (Kernel::UserProcessScheduler::The().CurrentProcess().Leak().GetLocalCode())
 
 #define err_global_ok()	  (Kernel::kErrorLocalNumber == Kernel::kErrorSuccess)
 #define err_global_fail() (Kernel::kErrorLocalNumber != Kernel::kErrorSuccess)

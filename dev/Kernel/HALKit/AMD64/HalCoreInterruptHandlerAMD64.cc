@@ -15,7 +15,7 @@ STATIC BOOL kIsScheduling = NO;
 /// @param rsp
 EXTERN_C void idt_handle_gpf(Kernel::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().GetCurrentProcess();
+	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
 		return;
@@ -39,7 +39,7 @@ EXTERN_C void idt_handle_gpf(Kernel::UIntPtr rsp)
 /// @param rsp
 EXTERN_C void idt_handle_pf(Kernel::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().GetCurrentProcess();
+	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
 		return;
@@ -86,7 +86,7 @@ EXTERN_C void idt_handle_scheduler(Kernel::UIntPtr rsp)
 /// @param rsp
 EXTERN_C void idt_handle_math(Kernel::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().GetCurrentProcess();
+	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
 		return;
@@ -110,7 +110,7 @@ EXTERN_C void idt_handle_math(Kernel::UIntPtr rsp)
 /// @param rsp
 EXTERN_C void idt_handle_generic(Kernel::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().GetCurrentProcess();
+	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
 		return;
@@ -132,7 +132,7 @@ EXTERN_C void idt_handle_generic(Kernel::UIntPtr rsp)
 
 EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rip)
 {
-	auto process = Kernel::UserProcessScheduler::The().GetCurrentProcess();
+	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
 		return;
@@ -156,7 +156,7 @@ EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rip)
 /// @param rsp
 EXTERN_C void idt_handle_ud(Kernel::UIntPtr rsp)
 {
-	auto process = Kernel::UserProcessScheduler::The().GetCurrentProcess();
+	auto process = Kernel::UserProcessScheduler::The().CurrentProcess();
 
 	if (process.Leak().Status != Kernel::ProcessStatusKind::kRunning)
 		return;

@@ -442,7 +442,7 @@ namespace Kernel
 			if (UserProcessHelper::CanBeScheduled(process))
 			{
 				// Set current process header.
-				this->GetCurrentProcess() = process;
+				this->CurrentProcess() = process;
 
 				process.PTime = static_cast<Int32>(process.Affinity);
 
@@ -476,7 +476,7 @@ namespace Kernel
 
 	/// @brief Gets current running process.
 	/// @return
-	Ref<UserProcess>& UserProcessScheduler::GetCurrentProcess()
+	Ref<UserProcess>& UserProcessScheduler::CurrentProcess()
 	{
 		return mTeam.AsRef();
 	}
@@ -485,11 +485,11 @@ namespace Kernel
 	/// @return UserProcess ID integer.
 	ErrorOr<PID> UserProcessHelper::TheCurrentPID()
 	{
-		if (!kProcessScheduler.GetCurrentProcess())
+		if (!kProcessScheduler.CurrentProcess())
 			return ErrorOr<PID>{kErrorProcessFault};
 
 		kcout << "UserProcessHelper::TheCurrentPID: Leaking ProcessId...\r";
-		return ErrorOr<PID>{kProcessScheduler.GetCurrentProcess().Leak().ProcessId};
+		return ErrorOr<PID>{kProcessScheduler.CurrentProcess().Leak().ProcessId};
 	}
 
 	/// @brief Check if process can be schedulded.

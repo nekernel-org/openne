@@ -303,7 +303,7 @@ namespace Kernel
 		const Bool HasMP() override;
 
 	public:
-		Ref<UserProcess>& GetCurrentProcess();
+		Ref<UserProcess>& CurrentProcess();
 		const SizeT		  Run() noexcept;
 
 	public:
