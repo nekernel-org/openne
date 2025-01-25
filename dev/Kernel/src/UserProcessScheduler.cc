@@ -513,10 +513,6 @@ namespace Kernel
 		if (!process.Name[0])
 			return No;
 
-		// real time processes shouldn't wait that much.
-		if (process.Affinity == AffinityKind::kRealTime)
-			return Yes;
-
 		return process.PTime < 1;
 	}
 
@@ -546,21 +542,6 @@ namespace Kernel
 			if (HardwareThreadScheduler::The()[index].Leak()->Kind() == kInvalidAP ||
 				HardwareThreadScheduler::The()[index].Leak()->Kind() == kAPBoot)
 				continue;
-
-			// a fallback is a special core for real-time tasks which needs immediate execution.
-			if (HardwareThreadScheduler::The()[index].Leak()->Kind() == kAPFallback)
-			{
-				if (UserProcessScheduler::The().CurrentTeam().AsArray()[new_pid].Affinity != AffinityKind::kRealTime)
-					continue;
-
-				if (HardwareThreadScheduler::The()[index].Leak()->Switch(image_ptr, stack, frame_ptr, new_pid))
-					return YES;
-
-				continue;
-			}
-
-      if (UserProcessScheduler::The().CurrentTeam().AsArray()[new_pid].Affinity == AffinityKind::kRealTime)
-        continue;
 
 			PID prev_pid									 = UserProcessHelper::TheCurrentPID();
 			UserProcessHelper::TheCurrentPID().Leak().Leak() = new_pid;

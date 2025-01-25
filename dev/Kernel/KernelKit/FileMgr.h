@@ -22,7 +22,7 @@
 #define INC_FILEMGR_H
 
 #ifdef __FSKIT_INCLUDES_NEFS__
-#include <FSKit/NeFS.h>
+#include <FSKit/OpenNeFS.h>
 #endif // __FSKIT_INCLUDES_NEFS__
 
 #ifdef __FSKIT_INCLUDES_HPFS__

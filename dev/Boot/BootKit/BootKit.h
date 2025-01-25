@@ -21,7 +21,7 @@
 
 /// include NeFS header and Support header as well.
 
-#include <FSKit/NeFS.h>
+#include <FSKit/OpenNeFS.h>
 #include <BootKit/Support.h>
 
 /***********************************************************************************/
@@ -238,7 +238,7 @@ namespace Boot
 
 			fDiskDev.Read(buf, BootDev::kSectorSize);
 
-			NFS_ROOT_PARTITION_BLOCK* blockPart = reinterpret_cast<NFS_ROOT_PARTITION_BLOCK*>(buf);
+			NFS_SUPER_BLOCK* blockPart = reinterpret_cast<NFS_SUPER_BLOCK*>(buf);
 
 			BTextWriter writer;
 
@@ -271,7 +271,7 @@ namespace Boot
 		/// @param blob_list the blobs.
 		/// @param blob_cnt the number of blobs to write.
 		/// @param part the NeFS partition block.
-		Boolean WriteCatalogList(BFileDescriptor* blob_list, SizeT blob_cnt, NFS_ROOT_PARTITION_BLOCK& part)
+		Boolean WriteCatalogList(BFileDescriptor* blob_list, SizeT blob_cnt, NFS_SUPER_BLOCK& part)
 		{
 			BFileDescriptor* blob	  = blob_list;
 			Lba				 startLba = part.StartCatalog;
@@ -337,7 +337,7 @@ namespace Boot
 			return false;
 		}
 
-		NFS_ROOT_PARTITION_BLOCK part{0};
+		NFS_SUPER_BLOCK part{0};
 
 		CopyMem(part.Ident, kNeFSIdent, kNeFSIdentLen - 1);
 		CopyMem(part.PartitionName, part_name, StrLen(part_name));
@@ -354,9 +354,9 @@ namespace Boot
 		part.Flags		  = kNeFSPartitionTypeBoot | kNeFSPartitionTypeStandard;
 
 		fDiskDev.Leak().mBase = kNeFSRootCatalogStartAddress;
-		fDiskDev.Leak().mSize = sizeof(NFS_ROOT_PARTITION_BLOCK);
+		fDiskDev.Leak().mSize = sizeof(NFS_SUPER_BLOCK);
 
-		fDiskDev.Write((Char*)&part, sizeof(NFS_ROOT_PARTITION_BLOCK));
+		fDiskDev.Write((Char*)&part, sizeof(NFS_SUPER_BLOCK));
 
 		BTextWriter writer;
 

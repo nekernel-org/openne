@@ -7,7 +7,7 @@
 #include "KernelKit/DebugOutput.h"
 #ifdef __FSKIT_INCLUDES_NEFS__
 
-#include <FSKit/NeFS.h>
+#include <FSKit/OpenNeFS.h>
 #include <FirmwareKit/EPM.h>
 
 #include <Mod/AHCI/AHCI.h>
@@ -317,15 +317,15 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*
 	}
 	else if (!catalog)
 	{
-		Char part_block[sizeof(NFS_ROOT_PARTITION_BLOCK)] = {0};
+		Char part_block[sizeof(NFS_SUPER_BLOCK)] = {0};
 
 		drive.fPacket.fPacketContent = part_block;
-		drive.fPacket.fPacketSize	 = sizeof(NFS_ROOT_PARTITION_BLOCK);
+		drive.fPacket.fPacketSize	 = sizeof(NFS_SUPER_BLOCK);
 		drive.fPacket.fPacketLba	 = kNeFSRootCatalogStartAddress;
 
 		drive.fInput(drive.fPacket);
 
-		NFS_ROOT_PARTITION_BLOCK* blk_nefs = (NFS_ROOT_PARTITION_BLOCK*)part_block;
+		NFS_SUPER_BLOCK* blk_nefs = (NFS_SUPER_BLOCK*)part_block;
 		out_lba							   = blk_nefs->StartCatalog;
 	}
 
@@ -350,15 +350,15 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*
 	rt_copy_memory((VoidPtr) "fs/nefs-packet", drive.fPacket.fPacketMime,
 				   rt_string_len("fs/nefs-packet"));
 
-	Char buf_part_block[sizeof(NFS_ROOT_PARTITION_BLOCK)] = {0};
+	Char buf_part_block[sizeof(NFS_SUPER_BLOCK)] = {0};
 
 	drive.fPacket.fPacketContent = buf_part_block;
-	drive.fPacket.fPacketSize	 = sizeof(NFS_ROOT_PARTITION_BLOCK);
+	drive.fPacket.fPacketSize	 = sizeof(NFS_SUPER_BLOCK);
 	drive.fPacket.fPacketLba	 = kNeFSRootCatalogStartAddress;
 
 	drive.fInput(drive.fPacket);
 
-	NFS_ROOT_PARTITION_BLOCK* part_block = (NFS_ROOT_PARTITION_BLOCK*)buf_part_block;
+	NFS_SUPER_BLOCK* part_block = (NFS_SUPER_BLOCK*)buf_part_block;
 
 	drive.fPacket.fPacketContent = &temporary_catalog;
 	drive.fPacket.fPacketSize	 = sizeof(NFS_CATALOG_STRUCT);
@@ -402,7 +402,7 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*
 			// Get NeFS partition's block.
 
 			drive.fPacket.fPacketContent = buf_part_block;
-			drive.fPacket.fPacketSize	 = sizeof(NFS_ROOT_PARTITION_BLOCK);
+			drive.fPacket.fPacketSize	 = sizeof(NFS_SUPER_BLOCK);
 			drive.fPacket.fPacketLba	 = kNeFSRootCatalogStartAddress;
 
 			drive.fInput(drive.fPacket);
@@ -470,12 +470,12 @@ bool NeFileSystemParser::Format(_Input _Output DriveTrait* drive, _Input const L
 		return false;
 	}
 
-	Char fs_buf[sizeof(NFS_ROOT_PARTITION_BLOCK)] = {0};
+	Char fs_buf[sizeof(NFS_SUPER_BLOCK)] = {0};
 
 	Lba start = kNeFSRootCatalogStartAddress;
 
 	drive->fPacket.fPacketContent = fs_buf;
-	drive->fPacket.fPacketSize	  = sizeof(NFS_ROOT_PARTITION_BLOCK);
+	drive->fPacket.fPacketSize	  = sizeof(NFS_SUPER_BLOCK);
 	drive->fPacket.fPacketLba	  = start;
 
 	drive->fInput(&drive->fPacket);
@@ -547,7 +547,7 @@ bool NeFileSystemParser::Format(_Input _Output DriveTrait* drive, _Input const L
 	// disk isnt faulty and data has been fetched.
 	while (drive->fPacket.fPacketGood)
 	{
-		NFS_ROOT_PARTITION_BLOCK* part_block = (NFS_ROOT_PARTITION_BLOCK*)fs_buf;
+		NFS_SUPER_BLOCK* part_block = (NFS_SUPER_BLOCK*)fs_buf;
 
 		// check for an empty partition here.
 		if (part_block->PartitionName[0] == 0 &&
@@ -579,7 +579,7 @@ bool NeFileSystemParser::Format(_Input _Output DriveTrait* drive, _Input const L
 			part_block->FreeCatalog	 = sectorCount / sizeof(NFS_CATALOG_STRUCT);
 
 			drive->fPacket.fPacketContent = fs_buf;
-			drive->fPacket.fPacketSize	  = sizeof(NFS_ROOT_PARTITION_BLOCK);
+			drive->fPacket.fPacketSize	  = sizeof(NFS_SUPER_BLOCK);
 			drive->fPacket.fPacketLba	  = kNeFSRootCatalogStartAddress;
 
 			drive->fOutput(&drive->fPacket);
@@ -604,7 +604,7 @@ bool NeFileSystemParser::Format(_Input _Output DriveTrait* drive, _Input const L
 		start += part_block->DiskSize;
 
 		drive->fPacket.fPacketContent = fs_buf;
-		drive->fPacket.fPacketSize	  = sizeof(NFS_ROOT_PARTITION_BLOCK);
+		drive->fPacket.fPacketSize	  = sizeof(NFS_SUPER_BLOCK);
 		drive->fPacket.fPacketLba	  = start;
 
 		drive->fInput(&drive->fPacket);
@@ -720,14 +720,14 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::FindCatalog(_Input const Char* c
 		*catalog_name == 0)
 		return nullptr;
 
-	NFS_ROOT_PARTITION_BLOCK part{0};
+	NFS_SUPER_BLOCK part{0};
 	auto&					 drive = kMountpoint.A();
 
 	rt_copy_memory((VoidPtr) "fs/nefs-packet", drive.fPacket.fPacketMime,
 				   rt_string_len("fs/nefs-packet"));
 
 	drive.fPacket.fPacketContent = &part;
-	drive.fPacket.fPacketSize	 = sizeof(NFS_ROOT_PARTITION_BLOCK);
+	drive.fPacket.fPacketSize	 = sizeof(NFS_SUPER_BLOCK);
 	drive.fPacket.fPacketLba	 = kNeFSRootCatalogStartAddress;
 
 	drive.fInput(drive.fPacket);
@@ -904,16 +904,16 @@ Boolean NeFileSystemParser::RemoveCatalog(_Input const Char* catalog_name)
 
 		drive.fOutput(drive.fPacket); // send packet.
 
-		Char partitionBlockBuf[sizeof(NFS_ROOT_PARTITION_BLOCK)] = {0};
+		Char partitionBlockBuf[sizeof(NFS_SUPER_BLOCK)] = {0};
 
 		drive.fPacket.fPacketLba	 = kNeFSRootCatalogStartAddress;
 		drive.fPacket.fPacketContent = partitionBlockBuf;
-		drive.fPacket.fPacketSize	 = sizeof(NFS_ROOT_PARTITION_BLOCK);
+		drive.fPacket.fPacketSize	 = sizeof(NFS_SUPER_BLOCK);
 
 		drive.fInput(drive.fPacket);
 
-		NFS_ROOT_PARTITION_BLOCK* part_block =
-			reinterpret_cast<NFS_ROOT_PARTITION_BLOCK*>(partitionBlockBuf);
+		NFS_SUPER_BLOCK* part_block =
+			reinterpret_cast<NFS_SUPER_BLOCK*>(partitionBlockBuf);
 
 		--part_block->CatalogCount;
 		++part_block->FreeSectors;

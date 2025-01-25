@@ -18,25 +18,19 @@
 #define kEPMMagicLength		 (5)
 
 /* @brief AMD64 magic for EPM */
-#define kEPMMagic86 "EPMAM"
+#define kEPMMagic86 " PMAM"
 
 /* @brief RISC-V magic for EPM */
-#define kEPMMagicRISCV "EPMRV"
+#define kEPMMagicRISCV " PMRV"
 
 /* @brief ARM magic for EPM */
-#define kEPMMagicARM "EPMAR"
-
-/* @brief 64x0 magic for EPM */
-#define kEPMMagic64k "EPM64"
-
-/* @brief 32x0 magic for EPM */
-#define kEPMMagic32k "EPM32"
+#define kEPMMagicARM " PMAR"
 
 /* @brief POWER magic for EPM */
-#define kEPMMagicPPC "EPMPC"
+#define kEPMMagicPPC " PMPC"
 
 /* @brief Invalid magic for EPM */
-#define kEPMMagicError "EPM??"
+#define kEPMMagicError " PM??"
 
 #ifdef __ZKA_AMD64__
 #define kEPMMagic kEPMMagic86
@@ -60,19 +54,9 @@
 
 #define kEPMReserveLen (401)
 
-struct EPM_GUID;
 struct EPM_PART_BLOCK;
 
 /* The first 0 > 128 addresses of a disk contains these headers. */
-
-/// @brief EPM GUID structure.
-typedef struct EPM_GUID
-{
-	Kernel::UInt32 Data1;
-	Kernel::UInt16 Data2;
-	Kernel::UInt16 Data3;
-	Kernel::UInt8  Data4[8];
-} EPM_GUID;
 
 /**
  * @brief The EPM boot block.
@@ -82,7 +66,6 @@ struct PACKED EPM_PART_BLOCK
 {
 	Kernel::Char  Magic[kEPMMagicLength];
 	Kernel::Char  Name[kEPMNameLength];
-	EPM_GUID	  Guid;
 	Kernel::Int32 Version;
 	Kernel::Int64 NumBlocks;
 	Kernel::Int64 SectorSz;
@@ -90,7 +73,7 @@ struct PACKED EPM_PART_BLOCK
 	Kernel::Int64 LbaEnd;	// addition of lba_start to get the end of partition.
 	Kernel::Int16 Kind;
 	Kernel::Int32 FsVersion;
-	Kernel::Char  Fs[kEPMFilesystemLength]; /* NeFS, ffs2... */
+	Kernel::Char  Fs[kEPMFilesystemLength]; /* OpenNeFS, NeFS, ffs2... */
 	Kernel::Char  Reserved[kEPMReserveLen]; // to fill a full sector.
 };
 

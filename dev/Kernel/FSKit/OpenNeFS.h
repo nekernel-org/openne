@@ -2,8 +2,8 @@
 
 	Copyright (C) 2024, Amlal EL Mahrouss, all rights reserved.
 
-	FILE: NeFS.h
-	PURPOSE: NeFS (New extended File System) support.
+	FILE: OpenNeFS.h
+	PURPOSE: Open NeFS (New extended File System) support.
 
 	Revision History:
 
@@ -36,13 +36,13 @@ default.
 #define kNeFSSectorSz (512)
 
 #define kNeFSIdentLen (8)
-#define kNeFSIdent	  "  NeFS"
+#define kNeFSIdent	  "   OFS"
 #define kNeFSPadLen	  (392)
 
 #define kNeFSMetaFilePrefix '$'
 
-#define kNeFSVersionInteger (0x0129)
-#define kNeFSVerionString	"1.2.9"
+#define kNeFSVersionInteger (0x0100)
+#define kNeFSVerionString	"1.0.0"
 
 /// @brief Standard fork types.
 #define kNeFSDataFork	  "main_data"
@@ -92,7 +92,7 @@ default.
 
 /// @note Start after the partition map header. (Virtual addressing)
 #define kNeFSRootCatalogStartAddress (1024)
-#define kNeFSCatalogStartAddress	 ((2048) + sizeof(NFS_ROOT_PARTITION_BLOCK))
+#define kNeFSCatalogStartAddress	 ((2048) + sizeof(NFS_SUPER_BLOCK))
 
 #define kResourceTypeDialog (10)
 #define kResourceTypeString (11)
@@ -117,7 +117,7 @@ default.
 
 struct NFS_CATALOG_STRUCT;
 struct NFS_FORK_STRUCT;
-struct NFS_ROOT_PARTITION_BLOCK;
+struct NFS_SUPER_BLOCK;
 
 enum
 {
@@ -142,8 +142,6 @@ enum
 /// @brief Catalog type.
 struct PACKED NFS_CATALOG_STRUCT final
 {
-	BOOL ForkOrCatalog : 1 {0};
-
 	Kernel::Char Name[kNeFSNodeNameLen] = {0};
 	Kernel::Char Mime[kNeFSMimeNameLen] = {0};
 
@@ -179,8 +177,6 @@ struct PACKED NFS_CATALOG_STRUCT final
 /// whereas the data fork is reserved for file data.
 struct PACKED NFS_FORK_STRUCT final
 {
-	BOOL ForkOrCatalog : 1 {1};
-
 	Kernel::Char ForkName[kNeFSForkNameLen]	   = {0};
 	Kernel::Char CatalogName[kNeFSNodeNameLen] = {0};
 
@@ -200,8 +196,8 @@ struct PACKED NFS_FORK_STRUCT final
 	Kernel::Char Pad[2] = {0};
 };
 
-/// @brief Partition block type
-struct PACKED NFS_ROOT_PARTITION_BLOCK final
+/// @brief Partition superblock type
+struct PACKED NFS_SUPER_BLOCK final
 {
 	Kernel::Char Ident[kNeFSIdentLen]	 = {0};
 	Kernel::Char PartitionName[kPartLen] = {0};

@@ -55,7 +55,6 @@ namespace Kernel
 	//! to run.
 	enum class AffinityKind : Int32
 	{
-		kRealTime	  = 500,
 		kVeryHigh	  = 250,
 		kHigh		  = 200,
 		kStandard	  = 1000,
