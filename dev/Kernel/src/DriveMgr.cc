@@ -171,14 +171,15 @@ namespace Kernel
 				trait.fPacket.fPacketReadOnly = NO;
 				trait.fKind					  = kMassStorageDisc | kEPMDrive;
 
-				kcout << "Formatted Disk is EPM (Mass Storage)\r";
+				kcout << "Disk is EPM.\r";
 
 				trait.fSectorSz = block_struct.SectorSz;
 				trait.fLbaEnd	= block_struct.LbaEnd;
 				trait.fLbaStart = block_struct.LbaStart;
 
 				if (trait.fSectorSz == 0 ||
-					trait.fLbaEnd == 0)
+					trait.fLbaEnd == 0 ||
+					trait.fSectorSz == 0)
 				{
 					ke_panic(RUNTIME_CHECK_FAILED, "Invalid EPM partition!");
 				}

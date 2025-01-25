@@ -95,7 +95,7 @@ namespace Kernel
 	/// @param should_wakeup if the program shall wakeup or not.
 	/***********************************************************************************/
 
-	Void UserProcess::Wake(const bool should_wakeup)
+	Void UserProcess::Wake(const Bool should_wakeup)
 	{
 		this->Status =
 			should_wakeup ? ProcessStatusKind::kRunning : ProcessStatusKind::kFrozen;
@@ -513,6 +513,10 @@ namespace Kernel
 		if (!process.Name[0])
 			return No;
 
+		// real time processes shouldn't wait that much.
+		if (process.Affinity == AffinityKind::kRealTime)
+			return Yes;
+
 		return process.PTime < 1;
 	}
 
@@ -546,7 +550,7 @@ namespace Kernel
 			// a fallback is a special core for real-time tasks which needs immediate execution.
 			if (HardwareThreadScheduler::The()[index].Leak()->Kind() == kAPFallback)
 			{
-				if (UserProcessScheduler::The().GetCurrentProcess().Leak().Affinity != AffinityKind::kRealTime)
+				if (UserProcessScheduler::The().CurrentTeam().AsArray()[new_pid].Affinity != AffinityKind::kRealTime)
 					continue;
 
 				if (HardwareThreadScheduler::The()[index].Leak()->Switch(image_ptr, stack, frame_ptr, new_pid))
@@ -554,6 +558,9 @@ namespace Kernel
 
 				continue;
 			}
+
+      if (UserProcessScheduler::The().CurrentTeam().AsArray()[new_pid].Affinity == AffinityKind::kRealTime)
+        continue;
 
 			PID prev_pid									 = UserProcessHelper::TheCurrentPID();
 			UserProcessHelper::TheCurrentPID().Leak().Leak() = new_pid;
