@@ -1,23 +1,22 @@
-<!-- README of NeKernel -->
+<!-- Read Me of NeKernel -->
 
-# Open New Kernel Architecture (NeKernel)
+# New Kernel Architecture (NeKernel)
 
-## Brief
+## Brief:
 
-Stripped down version of NeKernel for open-source purposes.
+A Microkernel written in C++ 20, with a System Call Interface Library, and custom bootloader.
 
-## Demo Screenshots:
+## Screenshots:
 
 ![doc/apic.png](doc/apic.png)
-
 ![doc/filesystem.png](doc/filesystem.png)
 
-## Requirements
+## Requirements:
 
 - MinGW/GCC for the Kernel, Boot Loader and the LibSCI.
 - Netwide Assembler for the x64 assembly files (in case you're compiling for AMD64).
 
-### Installation
+## Installation:
 
 Clone repository:
 
