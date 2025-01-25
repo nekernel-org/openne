@@ -8,13 +8,13 @@ BEGIN
   BEGIN
     BLOCK "080904E4"
     BEGIN
-      VALUE "CompanyName", "Amlal EL Mahrouss."
-	  VALUE "FileDescription", "ZKA Minimal Kernel."
+      VALUE "CompanyName", "Amlal El Mahrouss."
+	  VALUE "FileDescription", "NeKernel MicroKernel."
       VALUE "FileVersion", KERNEL_VERSION
-	  VALUE "InternalName", "minoskrnl"
-      VALUE "LegalCopyright", "(c) 2024 Amlal EL Mahrouss, all rights reserved."
-      VALUE "OriginalFilename", "minoskrnl.exe"
-      VALUE "ProductName", "ZKA Minimal Kernel."
+	  VALUE "InternalName", "neoskrnl"
+      VALUE "LegalCopyright", "(c) 2024 Amlal El Mahrouss, all rights reserved."
+      VALUE "OriginalFilename", "neoskrnl.exe"
+      VALUE "ProductName", "NeKernel."
       VALUE "ProductVersion", KERNEL_VERSION
     END
   END

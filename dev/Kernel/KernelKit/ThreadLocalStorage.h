@@ -10,7 +10,7 @@
 #include <NewKit/Defines.h>
 #include <NewKit/ErrorOr.h>
 
-///! @brief Thread Local Storage for minoskrnl.
+///! @brief Thread Local Storage for neoskrnl.
 
 #define kCookieMag0Idx 0
 #define kCookieMag1Idx 1

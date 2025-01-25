@@ -1,6 +1,6 @@
 ##################################################
 # (c) Amlal EL Mahrouss, all rights reserved.
-# This is the minoskrnl's makefile.
+# This is the neoskrnl's makefile.
 ##################################################
 
 CXX			= x86_64-w64-mingw32-g++
@@ -37,7 +37,7 @@ LDFLAGS		= -e hal_init_platform --subsystem=17 --image-base 0x4000000
 LDOBJ		= obj/*.obj
 
 # This file is the Kernel, responsible of task, memory, driver, sci, disk and device management.
-KERNEL_IMG		= minoskrnl.exe
+KERNEL_IMG		= neoskrnl.exe
 
 .PHONY: error
 error:

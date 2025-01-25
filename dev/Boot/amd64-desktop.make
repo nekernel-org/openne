@@ -47,7 +47,7 @@ FLAG_GNU=-fshort-wchar -D__EFI_x86_64__ -mno-red-zone -D__MINOSKRNL__ -D__ZBAOSL
                         -std=c++20 -DBOOTZ_GPT_SUPPORT -DBOOTZ_EPM_SUPPORT -D__HAVE_ZKA_APIS__ -DZBA_USE_FB -D__ZKA_AMD64__ -D__ZKA__ -DZKA_AUTO_FORMAT
 
 BOOTLOADER=zbaosldr.exe
-KERNEL=minoskrnl.exe
+KERNEL=neoskrnl.exe
 SYSCHK=syschk.sys
 STARTUP=startup.sys
 SCIKIT=libSCI.dylib
@@ -98,7 +98,7 @@ efi:
 	$(HTTP_GET) https://retrage.github.io/edk2-nightly/bin/DEBUGX64_OVMF.fd -O OVMF.fd
 
 BINS=*.bin
-EXECUTABLES=zbaosldr.exe minoskrnl.exe OVMF.fd
+EXECUTABLES=zbaosldr.exe neoskrnl.exe OVMF.fd
 
 TARGETS=$(REM_FLAG) $(OBJ) $(BIN) $(IMG) $(IMG_2) $(EXECUTABLES)
 
