@@ -49,8 +49,8 @@ Kernel::SizeT drv_get_size();
 /// This file implements the New extended File System.
 ///	New extended File System implements a B-Tree based algortihm.
 ///		/
-///	/Path1/		/ath2/
-/// /readme.rtf		/ListContents.pef /readme.lnk <-- symlink.
+///	/Path1/		/Path2/
+/// /readme.rtf		/ListContents.pef /readme.lnk <-- that one is a symlink.
 ///								/Path1/readme.rtf
 /***********************************************************************************/
 

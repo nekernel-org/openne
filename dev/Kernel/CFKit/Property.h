@@ -18,11 +18,11 @@ namespace CFKit
 {
 	using namespace Kernel;
 
-	/// @brief handle to anything (number, ptr, string...)
+	/// @brief handle to anything (number, class ptr, string...)
 	using PropertyId = UIntPtr;
 
 	/// @brief Kernel property class.
-	/// @example \Properties\SmpCores or \Properties\KernelVersion
+	/// @example /etc/memory/SmpCore{n} or /etc/memory/KernelDist{v.b.p}
 	class Property
 	{
 	public:
