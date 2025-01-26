@@ -69,7 +69,7 @@ static Kernel::Void drv_calculate_disk_geometry() noexcept
 	kCurrentDiskSectorCount = (identify_data[61] << 16) | identify_data[60];
 
 	kcout << "Disk Size: " << Kernel::number(drv_get_size()) << endl;
-	kcout << "Highest LBA: " << Kernel::number(kCurrentDiskSectorCount) << endl;
+	kcout << "Highest Disk LBA: " << Kernel::number(kCurrentDiskSectorCount) << endl;
 }
 
 /// @brief Initializes an AHCI disk.
@@ -89,10 +89,10 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 		if (kPCIDevice.Subclass() == kSATASubClass &&
 			kPCIDevice.ProgIf() == kSATAProgIfAHCI)
 		{
-			kPCIDevice.EnableMmio(0x24);	  // Enable the memory index_byte/o for this ahci device.
-			kPCIDevice.BecomeBusMaster(0x24); // Become bus master for this ahci device, so that we can control it.
+			kPCIDevice.EnableMmio(kSATABar5);	  // Enable the memory index_byte/o for this ahci device.
+			kPCIDevice.BecomeBusMaster(kSATABar5); // Become bus master for this ahci device, so that we can control it.
 
-			HbaMem* mem_ahci = (HbaMem*)kPCIDevice.Bar(0x24);
+			HbaMem* mem_ahci = (HbaMem*)kPCIDevice.Bar(kSATABar5);
 
 			Kernel::UInt32 ports_implemented = mem_ahci->Pi;
 			Kernel::UInt16 ahci_index		 = 0;
@@ -113,9 +113,9 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 					Kernel::UInt8 ipm = (mem_ahci->Ports[ahci_index].Ssts >> 8) & 0x0F;
 					Kernel::UInt8 det = mem_ahci->Ports[ahci_index].Ssts & 0x0F;
 
-					if (mem_ahci->Ports[ahci_index].Sig == kSATASignature)
+					if (mem_ahci->Ports[ahci_index].Sig == kSATASignature && det == 3 && ipm == 1)
 					{
-						kcout << "Port is SATA.\r";
+						kcout << "Port is implemented as SATA.\r";
 
 						kSATAPortIdx = ahci_index;
 						kSATAPort	 = mem_ahci;
@@ -127,6 +127,7 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 						{
 							if (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdFR)
 								continue;
+
 							if (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR)
 								continue;
 
@@ -145,21 +146,19 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 
 						rt_set_memory((VoidPtr)((UIntPtr)kSATAPort->Ports[kSATAPortIdx].Fb), 0, 256);
 
-						HbaCmdHeader* cmdheader = (HbaCmdHeader*)((UIntPtr)kSATAPort->Ports[kSATAPortIdx].Clb);
+						HbaCmdHeader* cmd_header = (HbaCmdHeader*)((UIntPtr)kSATAPort->Ports[kSATAPortIdx].Clb);
 
-						for (int i = 0; i < 32; i++)
+						for (Int32 i = 0; i < 32; i++)
 						{
-							cmdheader[i].Prdtl = 8;
+							cmd_header[i].Prdtl = 8;
 
-							cmdheader[i].Ctba  = kAHCIBaseAddress + (40 << 10) + (kSATAPortIdx << 13) + (i << 8);
-							cmdheader[i].Ctbau = 0;
+							cmd_header[i].Ctba  = kAHCIBaseAddress + (40 << 10) + (kSATAPortIdx << 13) + (i << 8);
+							cmd_header[i].Ctbau = 0;
 
-							rt_set_memory((VoidPtr)(UIntPtr)cmdheader[i].Ctba, 0, 256);
+							rt_set_memory((VoidPtr)(UIntPtr)cmd_header[i].Ctba, 0, 256);
 						}
 
-						while (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR)
-						{
-						}
+						while (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR);
 
 						kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre;
 						kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdST;
@@ -260,7 +259,7 @@ static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buff
 
 	h2d_fis->FisType = kFISTypeRegH2D;
 
-	h2d_fis->CmdOrCtrl = YES;
+	h2d_fis->CmdOrCtrl = CommandOrCTRL;
 
 	h2d_fis->Command = Write ? kAHCICmdWriteDmaEx : kAHCICmdReadDmaEx;
 
@@ -279,7 +278,7 @@ static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buff
 
 	while ((kSATAPort->Ports[kSATAPortIdx].Tfd & (kAhciSRBsy | kAhciSRDrq)))
 	{
-		kcout << "waiting for slot to be ready\r\n";
+		kcout << "Waiting for slot to be ready...\r\n";
 	}
 
 	kSATAPort->Is = -1;
