@@ -21,7 +21,7 @@ A Microkernel written in C++ 20, with a System Call Interface Library, and custo
 Clone repository:
 
 ```
-git clone git@github.com:mediaswirl/openne.git
+git clone git@github.com:amlel-el-mahrouss/openne.git
 cd openne
 ```
 
