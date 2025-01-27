@@ -326,7 +326,7 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*
 		drive.fInput(drive.fPacket);
 
 		NFS_SUPER_BLOCK* blk_nefs = (NFS_SUPER_BLOCK*)part_block;
-		out_lba							   = blk_nefs->StartCatalog;
+		out_lba					  = blk_nefs->StartCatalog;
 	}
 
 	NFS_CATALOG_STRUCT* child_catalog = new NFS_CATALOG_STRUCT();
@@ -721,7 +721,7 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::FindCatalog(_Input const Char* c
 		return nullptr;
 
 	NFS_SUPER_BLOCK part{0};
-	auto&					 drive = kMountpoint.A();
+	auto&			drive = kMountpoint.A();
 
 	rt_copy_memory((VoidPtr) "fs/nefs-packet", drive.fPacket.fPacketMime,
 				   rt_string_len("fs/nefs-packet"));

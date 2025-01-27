@@ -89,7 +89,7 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 		if (kPCIDevice.Subclass() == kSATASubClass &&
 			kPCIDevice.ProgIf() == kSATAProgIfAHCI)
 		{
-			kPCIDevice.EnableMmio(kSATABar5);	  // Enable the memory index_byte/o for this ahci device.
+			kPCIDevice.EnableMmio(kSATABar5);	   // Enable the memory index_byte/o for this ahci device.
 			kPCIDevice.BecomeBusMaster(kSATABar5); // Become bus master for this ahci device, so that we can control it.
 
 			HbaMem* mem_ahci = (HbaMem*)kPCIDevice.Bar(kSATABar5);
@@ -152,13 +152,14 @@ Kernel::Boolean drv_std_init(Kernel::UInt16& PortsImplemented)
 						{
 							cmd_header[i].Prdtl = 8;
 
-							cmd_header[i].Ctba  = kAHCIBaseAddress + (40 << 10) + (kSATAPortIdx << 13) + (i << 8);
+							cmd_header[i].Ctba	= kAHCIBaseAddress + (40 << 10) + (kSATAPortIdx << 13) + (i << 8);
 							cmd_header[i].Ctbau = 0;
 
 							rt_set_memory((VoidPtr)(UIntPtr)cmd_header[i].Ctba, 0, 256);
 						}
 
-						while (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR);
+						while (kSATAPort->Ports[kSATAPortIdx].Cmd & kHBAPxCmdCR)
+							;
 
 						kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdFre;
 						kSATAPort->Ports[kSATAPortIdx].Cmd |= kHBAPxCmdST;
@@ -273,6 +274,8 @@ static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buff
 
 	h2d_fis->Device = kSataLBAMode;
 
+	// 28-bit LBA mode, fis is done being configured.
+
 	h2d_fis->CountLow  = sector_sz & 0xFF;
 	h2d_fis->CountHigh = (sector_sz >> 8) & 0xFF;
 
@@ -282,6 +285,8 @@ static Kernel::Void drv_std_input_output(Kernel::UInt64 lba, Kernel::UInt8* buff
 	}
 
 	kSATAPort->Is = -1;
+
+	// send fis/cmdtbl/cmdhdr.
 	kSATAPort->Ports[kSATAPortIdx].Ci |= 1 << slot;
 
 	while (kSATAPort->Ports[kSATAPortIdx].Ci & (1 << slot))
