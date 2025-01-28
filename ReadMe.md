@@ -31,6 +31,8 @@ git clone git@github.com:amlel-el-mahrouss/openne.git
 cd openne && ./setup_amd64.sh && ./debug_ata.sh
 ```
 
-** Licensed under GPL v3 **
+## License:
+
+**Licensed under GPL v3** copyright Amlal El Mahrouss 2025, all rights reserved.
 
 ###### Copyright (C) 2024-2025 Amlal EL Mahrouss, all rights reserved. All rights reserved.
