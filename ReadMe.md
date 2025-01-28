@@ -1,14 +1,20 @@
 <!-- Read Me of NeKernel -->
 
-# New Kernel Architecture (NeKernel)
+# OpenNE
 
-## Brief:
+OpenNE is a **modular microkernel and bootloader** written in **C++20**, designed for **performance, portability, and scalability**.  
+Inspired by NT Kernel and microkernel architectures, it features **APIC-based multiprocessing, a custom filesystem (OpenNeFS), and EFI-based booting**.  
 
-A Microkernel written in C++ 20, with a System Call Interface Library, and custom bootloader.
+We welcome contributions and improvements—feel free to submit PRs or issues!
 
 ## Screenshots:
 
+#### APIC:
+
 ![doc/apic.png](doc/apic.png)
+
+#### Filesystem:
+
 ![doc/filesystem.png](doc/filesystem.png)
 
 ## Requirements:
@@ -22,15 +28,9 @@ Clone repository:
 
 ```
 git clone git@github.com:amlel-el-mahrouss/openne.git
-cd openne
+cd openne && ./setup_amd64.sh && ./debug_ata.sh
 ```
 
-</br>
-
-And then select the makefile (arm64 and amd64 are stable and EFI based) to execute:
-
-```
-make -f amd64-efi.make all
-```
+** Licensed under GPL v3 **
 
 ###### Copyright (C) 2024-2025 Amlal EL Mahrouss, all rights reserved. All rights reserved.
