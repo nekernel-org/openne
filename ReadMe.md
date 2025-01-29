@@ -2,6 +2,8 @@
 
 # OpenNE
 
+![res/openne.png](res/openne.png)
+
 OpenNE is a **modular microkernel and bootloader** written in **C++20**, designed for **performance, portability, and scalability**.  
 Inspired by NT Kernel and microkernel architectures, it features **APIC-based multiprocessing, a custom filesystem (OpenNeFS), and EFI-based booting**.  
 
