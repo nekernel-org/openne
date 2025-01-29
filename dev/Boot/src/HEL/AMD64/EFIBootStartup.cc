@@ -20,7 +20,7 @@
 
 // Makes the compiler shut up.
 #ifndef kMachineModel
-#define kMachineModel "ZkaOS"
+#define kMachineModel "OpNe"
 #endif // !kMachineModel
 
 #ifndef kExpectedWidth
