@@ -23,7 +23,7 @@
 
 using namespace Kernel;
 
-#ifdef __ZKA_NO_BUILTIN__
+#ifdef __OPENNE_NO_BUILTIN__
 /***********************************************************************************/
 /**
 	Define those external symbols, to make the editor shutup
@@ -447,7 +447,7 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*
 /// @return If it was sucessful, see err_global_get().
 bool NeFileSystemParser::Format(_Input _Output DriveTrait* drive, _Input const Lba endLba, _Input const Int32 flags, const Char* part_name)
 {
-#ifdef ZKA_EPM_SUPPORT
+#ifdef OPENNE_EPM_SUPPORT
 	if (*part_name == 0 ||
 		endLba == 0)
 		return false;
@@ -604,7 +604,7 @@ bool NeFileSystemParser::Format(_Input _Output DriveTrait* drive, _Input const L
 
 		drive->fInput(&drive->fPacket);
 	}
-#endif // ZKA_EPM_SUPPORT
+#endif // OPENNE_EPM_SUPPORT
 
 	return false;
 }

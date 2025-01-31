@@ -42,7 +42,7 @@ namespace Kernel
 
 		~JSON() = default;
 
-		ZKA_COPY_DEFAULT(JSON);
+		OPENNE_COPY_DEFAULT(JSON);
 
 		const Bool& IsUndefined()
 		{

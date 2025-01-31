@@ -19,7 +19,7 @@ EMU=qemu-system-aarch64
 endif
 
 ifeq ($(NEWS_MODEL), )
-ZKA_MODEL=-DkMachineModel="\"ZKA\""
+OPENNE_MODEL=-DkMachineModel="\"ZKA\""
 endif
 
 BIOS=OVMF.fd
@@ -44,9 +44,9 @@ REM=rm
 REM_FLAG=-f
 
 FLAG_ASM=-f win64
-FLAG_GNU=-fshort-wchar -c -ffreestanding -MMD -mno-red-zone -D__ZKA_ARM64__ -fno-rtti -fno-exceptions -I./ \
+FLAG_GNU=-fshort-wchar -c -ffreestanding -MMD -mno-red-zone -D__OPENNE_ARM64__ -fno-rtti -fno-exceptions -I./ \
 			 -target aarch64-unknown-windows \
-				-std=c++20 -DBOOTZ_EPM_SUPPORT -DkExpectedWidth=320 -DkExpectedHeight=480 -D__FSKIT_USE_NEFS__ -D__BOOTLDR_STANDALONE__ -D__MINOSKRNL__ -D__ZBAOSLDR__ -D__HAVE_ZKA_APIS__ -D__ZKA__ -I../ -I../Kernel
+				-std=c++20 -DBOOTZ_EPM_SUPPORT -DkExpectedWidth=320 -DkExpectedHeight=480 -D__FSKIT_USE_NEFS__ -D__BOOTLDR_STANDALONE__ -D__MINOSKRNL__ -D__ZBAOSLDR__ -D__HAVE_OPENNE_APIS__ -D__OPENNE__ -I../ -I../Kernel
 
 BOOT_LOADER=zbaosldr.exe
 KERNEL=neoskrnl.exe
@@ -74,7 +74,7 @@ endif
 .PHONY: compile
 compile:
 	$(RESCMD)
-	$(CC_GNU) $(ZKA_MODEL) $(STANDALONE_MACRO) $(FLAG_GNU) $(DEBUG) \
+	$(CC_GNU) $(OPENNE_MODEL) $(STANDALONE_MACRO) $(FLAG_GNU) $(DEBUG) \
 	$(wildcard src/HEL/ARM64/*.cc) \
 	$(wildcard src/HEL/ARM64/*.S) \
 	$(wildcard src/*.cc)

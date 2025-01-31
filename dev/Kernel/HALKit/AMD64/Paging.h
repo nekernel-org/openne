@@ -42,7 +42,7 @@ EXTERN_C Kernel::VoidPtr hal_read_cr3(); // @brief Page table.
 namespace Kernel::HAL
 {
 	/// @brief Final page entry (Not PML, PDPT)
-	struct PACKED ZKA_PTE final
+	struct PACKED OPENNE_PTE final
 	{
 		UInt64 Present : 1;
 		UInt64 Wr : 1;
@@ -83,9 +83,9 @@ namespace Kernel::HAL
 		}
 	} // namespace Detail
 
-	struct ZKA_PDE final
+	struct OPENNE_PDE final
 	{
-		ZKA_PTE* ALIGN(kPageAlign) fEntries[kPageMax];
+		OPENNE_PTE* ALIGN(kPageAlign) fEntries[kPageMax];
 	};
 
 	auto mm_alloc_bitmap(Boolean wr, Boolean user, SizeT size, Bool is_page) -> VoidPtr;
@@ -94,6 +94,6 @@ namespace Kernel::HAL
 
 namespace Kernel
 {
-	typedef HAL::ZKA_PTE PTE;
-	typedef HAL::ZKA_PDE PDE;
+	typedef HAL::OPENNE_PTE PTE;
+	typedef HAL::OPENNE_PDE PDE;
 } // namespace Kernel

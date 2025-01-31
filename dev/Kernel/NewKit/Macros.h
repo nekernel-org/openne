@@ -54,9 +54,9 @@
 #define ATTRIBUTE(X) __attribute__((X))
 #endif // #ifndef ATTRIBUTE
 
-#ifndef __ZKA_VER__
-#define __ZKA_VER__ (2024)
-#endif // !__ZKA_VER__
+#ifndef __OPENNE_VER__
+#define __OPENNE_VER__ (2024)
+#endif // !__OPENNE_VER__
 
 #ifndef EXTERN
 #define EXTERN extern
@@ -114,13 +114,13 @@
 #define CONST const
 
 #define STRINGIFY(X)  #X
-#define ZKA_UNUSED(X) ((Kernel::Void)X)
+#define OPENNE_UNUSED(X) ((Kernel::Void)X)
 
 #ifndef RGB
 #define RGB(R, G, B) (Kernel::UInt32)(R | G << 0x8 | B << 0x10)
 #endif // !RGB
 
-#ifdef __ZKA_AMD64__
+#ifdef __OPENNE_AMD64__
 #define dbg_break_point() asm volatile("int $3")
 #else
 #define dbg_break_point() ((void)0)

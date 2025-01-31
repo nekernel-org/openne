@@ -35,7 +35,7 @@ namespace Kernel
 		~PEFLoader() override;
 
 	public:
-		ZKA_COPY_DEFAULT(PEFLoader);
+		OPENNE_COPY_DEFAULT(PEFLoader);
 
 	public:
 		const Char* Path() override;

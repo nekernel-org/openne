@@ -150,7 +150,7 @@ namespace Kernel
 		~UserProcess();
 
 	public:
-		ZKA_COPY_DEFAULT(UserProcess);
+		OPENNE_COPY_DEFAULT(UserProcess);
 
 	public:
 		Char			   Name[kProcessNameLen] = {"Process"};
@@ -258,7 +258,7 @@ namespace Kernel
 		explicit UserProcessTeam();
 		~UserProcessTeam() = default;
 
-		ZKA_COPY_DEFAULT(UserProcessTeam);
+		OPENNE_COPY_DEFAULT(UserProcessTeam);
 
 		Array<UserProcess, kSchedProcessLimitPerTeam>& AsArray();
 		Ref<UserProcess>&							   AsRef();
@@ -285,7 +285,7 @@ namespace Kernel
 		explicit UserProcessScheduler()	 = default;
 		~UserProcessScheduler() override = default;
 
-		ZKA_COPY_DEFAULT(UserProcessScheduler)
+		OPENNE_COPY_DEFAULT(UserProcessScheduler)
 
 		operator bool();
 		bool operator!();

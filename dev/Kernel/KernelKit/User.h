@@ -50,7 +50,7 @@ namespace Kernel
 		~User();
 
 	public:
-		ZKA_COPY_DEFAULT(User);
+		OPENNE_COPY_DEFAULT(User);
 
 	public:
 		bool operator==(const User& lhs);

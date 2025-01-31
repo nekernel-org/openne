@@ -237,7 +237,7 @@ namespace Kernel::HAL
 	namespace Detail
 	{
 		/* @brief TSS struct. */
-		struct ZKA_TSS final
+		struct OPENNE_TSS final
 		{
 			UInt32 fReserved1;
 			UInt64 fRsp0;
@@ -260,7 +260,7 @@ namespace Kernel::HAL
 		  @brief Global descriptor table entry, either null, code or data.
 		*/
 
-		struct PACKED ZKA_GDT_ENTRY final
+		struct PACKED OPENNE_GDT_ENTRY final
 		{
 			UInt16 fLimitLow;
 			UInt16 fBaseLow;
@@ -281,7 +281,7 @@ namespace Kernel::HAL
 
 		~APICController() = default;
 
-		ZKA_COPY_DEFAULT(APICController);
+		OPENNE_COPY_DEFAULT(APICController);
 
 	public:
 		UInt32 Read(UInt32 reg) noexcept;

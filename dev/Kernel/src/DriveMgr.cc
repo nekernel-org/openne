@@ -123,7 +123,7 @@ namespace Kernel
 		return "AHCI";
 	}
 #endif
-#ifdef __ZKA_MINIMAL_OS__
+#ifdef __OPENNE_MINIMAL_OS__
 	const Char* io_drv_kind(Void)
 	{
 		return "Not Loaded";
@@ -134,7 +134,7 @@ namespace Kernel
 	/// @param pckt the packet to read.
 	Void io_drv_unimplemented(DriveTrait::DrivePacket pckt) noexcept
 	{
-		ZKA_UNUSED(pckt);
+		OPENNE_UNUSED(pckt);
 	}
 
 	/// @brief Makes a new drive.

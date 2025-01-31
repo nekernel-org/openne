@@ -18,7 +18,7 @@ public:
 	explicit Device() = default;
 	virtual ~Device() = default;
 
-	ZKA_MOVE_DEFAULT(Device);
+	OPENNE_MOVE_DEFAULT(Device);
 
 	struct Trait
 	{

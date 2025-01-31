@@ -142,7 +142,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 
 	FB::fb_clear_video();
 
-	FBDrawBitMapInRegion(zka_disk, ZKA_DISK_WIDTH, ZKA_DISK_HEIGHT, (kHandoverHeader->f_GOP.f_Width - ZKA_DISK_WIDTH) / 2, (kHandoverHeader->f_GOP.f_Height - ZKA_DISK_HEIGHT) / 2);
+	FBDrawBitMapInRegion(zka_disk, OPENNE_DISK_WIDTH, OPENNE_DISK_HEIGHT, (kHandoverHeader->f_GOP.f_Width - OPENNE_DISK_WIDTH) / 2, (kHandoverHeader->f_GOP.f_Height - OPENNE_DISK_HEIGHT) / 2);
 
 	fb_clear();
 
@@ -182,7 +182,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 
 	for (; struct_ptr[lookup_index].Kind != EfiMemoryType::EfiConventionalMemory; ++lookup_index)
 	{
-		ZKA_UNUSED(0);
+		OPENNE_UNUSED(0);
 	}
 
 	kDefaultMemoryMap = lookup_index;
@@ -242,7 +242,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 
 			FB::fb_clear_video();
 
-			FBDrawBitMapInRegion(zka_has_disk, ZKA_HAS_DISK_WIDTH, ZKA_HAS_DISK_HEIGHT, (kHandoverHeader->f_GOP.f_Width - ZKA_HAS_DISK_WIDTH) / 2, (kHandoverHeader->f_GOP.f_Height - ZKA_HAS_DISK_HEIGHT) / 2);
+			FBDrawBitMapInRegion(zka_has_disk, OPENNE_HAS_DISK_WIDTH, OPENNE_HAS_DISK_HEIGHT, (kHandoverHeader->f_GOP.f_Width - OPENNE_HAS_DISK_WIDTH) / 2, (kHandoverHeader->f_GOP.f_Height - OPENNE_HAS_DISK_HEIGHT) / 2);
 
 			fb_clear();
 		}
@@ -289,7 +289,7 @@ EFI_EXTERN_C EFI_API Int32 Main(EfiHandlePtr	image_handle,
 	else
 	{
 		fb_init();
-		FBDrawBitMapInRegion(zka_no_disk, ZKA_NO_DISK_WIDTH, ZKA_NO_DISK_HEIGHT, (kHandoverHeader->f_GOP.f_Width - ZKA_NO_DISK_WIDTH) / 2, (kHandoverHeader->f_GOP.f_Height - ZKA_NO_DISK_HEIGHT) / 2);
+		FBDrawBitMapInRegion(zka_no_disk, OPENNE_NO_DISK_WIDTH, OPENNE_NO_DISK_HEIGHT, (kHandoverHeader->f_GOP.f_Width - OPENNE_NO_DISK_WIDTH) / 2, (kHandoverHeader->f_GOP.f_Height - OPENNE_NO_DISK_HEIGHT) / 2);
 
 		EFI::Stop();
 	}

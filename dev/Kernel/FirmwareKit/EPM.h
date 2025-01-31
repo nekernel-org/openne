@@ -32,10 +32,10 @@
 /* @brief Invalid magic for EPM */
 #define kEPMMagicError " PM??"
 
-#ifdef __ZKA_AMD64__
+#ifdef __OPENNE_AMD64__
 #define kEPMMagic kEPMMagic86
 #else
-#ifdef __ZKA_ARM64__
+#ifdef __OPENNE_ARM64__
 #define kEPMMagic kEPMMagicARM
 #else
 #define kEPMMagic kEPMMagicError

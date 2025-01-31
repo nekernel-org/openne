@@ -11,11 +11,11 @@ namespace Kernel::PCI
 	Iterator::Iterator(const Types::PciDeviceKind& type)
 	{
 		// probe devices.
-		for (int bus = 0; bus < ZKA_BUS_COUNT; ++bus)
+		for (int bus = 0; bus < OPENNE_BUS_COUNT; ++bus)
 		{
-			for (int device = 0; device < ZKA_DEVICE_COUNT; ++device)
+			for (int device = 0; device < OPENNE_DEVICE_COUNT; ++device)
 			{
-				for (int function = 0; function < ZKA_FUNCTION_COUNT; ++function)
+				for (int function = 0; function < OPENNE_FUNCTION_COUNT; ++function)
 				{
 					auto bar = 0x00;
 

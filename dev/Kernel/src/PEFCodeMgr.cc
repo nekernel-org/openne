@@ -27,15 +27,15 @@ namespace Kernel
 		/***********************************************************************************/
 		UInt32 ldr_get_platform(void) noexcept
 		{
-#if defined(__ZKA_32X0__)
+#if defined(__OPENNE_32X0__)
 			return kPefArch32x0;
-#elif defined(__ZKA_64X0__)
+#elif defined(__OPENNE_64X0__)
 			return kPefArch64x0;
-#elif defined(__ZKA_AMD64__)
+#elif defined(__OPENNE_AMD64__)
 			return kPefArchAMD64;
-#elif defined(__ZKA_PPC64__)
+#elif defined(__OPENNE_PPC64__)
 			return kPefArchPowerPC;
-#elif defined(__ZKA_ARM64__)
+#elif defined(__OPENNE_ARM64__)
 			return kPefArchARM64;
 #else
 			return kPefArchInvalid;

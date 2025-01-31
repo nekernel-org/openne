@@ -258,7 +258,7 @@ namespace Kernel
 		~NeFileSystemParser()		  = default;
 
 	public:
-		ZKA_COPY_DEFAULT(NeFileSystemParser);
+		OPENNE_COPY_DEFAULT(NeFileSystemParser);
 
 	public:
 		/// @brief Creates a new fork inside the NeFS  partition.
@@ -352,7 +352,7 @@ namespace Kernel
 
 		~NeFileSystemJournal() = default;
 
-		ZKA_COPY_DEFAULT(NeFileSystemJournal);
+		OPENNE_COPY_DEFAULT(NeFileSystemJournal);
 
 		Bool CreateJournal(NeFileSystemParser* parser)
 		{
