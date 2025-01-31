@@ -62,6 +62,7 @@ namespace Kernel
 			UInt32	fPacketCRC32{0UL};					//! sanity crc, in case if good is set to false
 			Boolean fPacketGood{YES};
 			Lba		fPacketLba{0UL};
+			UInt32  fPacketKindFlags; //! the disk kind as flags.
 			Boolean fPacketReadOnly{NO};
 		} fPacket;
 

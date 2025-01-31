@@ -566,7 +566,7 @@ namespace Kernel
 				HardwareThreadScheduler::The()[index].Leak()->fPTime = prev_ptime;
 				UserProcessHelper::TheCurrentPID().Leak().Leak()	 = prev_pid;
 
-				HardwareThreadScheduler::The()[index].Leak()->Busy(NO);
+				HardwareThreadScheduler::The()[index].Leak()->Busy(YES);
 			}
 
 			HardwareThreadScheduler::The()[index].Leak()->Wake(NO);

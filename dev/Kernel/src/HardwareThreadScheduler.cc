@@ -91,11 +91,11 @@ namespace Kernel
 
 	HardwareThread::operator bool()
 	{
-		return this->fStack && !this->fBusy;
+		return this->StackFrame() && !this->IsBusy();
 	}
 
 	/***********************************************************************************/
-	/// @brief Wakeup the processor.
+	/// @brief Wakeup the AP/HART.
 	/***********************************************************************************/
 
 	Void HardwareThread::Wake(const bool wakeup) noexcept
@@ -111,6 +111,9 @@ namespace Kernel
 	/***********************************************************************************/
 	Bool HardwareThread::Switch(VoidPtr image_ptr, Ptr8 stack_ptr, HAL::StackFramePtr frame, const ThreadID& pid)
 	{
+		if (this->IsBusy())
+			return NO; // don't replace it yet.
+
 		this->fStack	 = frame;
 		this->fSourcePID = pid;
 
@@ -118,10 +121,6 @@ namespace Kernel
 		fStack->SP = reinterpret_cast<UIntPtr>(stack_ptr);
 
 		Bool ret = mp_register_process(fStack, this->fSourcePID);
-
-		if (ret)
-			this->Busy(YES);
-
 		return ret;
 	}
 

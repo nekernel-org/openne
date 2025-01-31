@@ -29,6 +29,12 @@ namespace Kernel
 	/// @return
 	Void io_drv_input(DriveTrait::DrivePacket pckt)
 	{
+		if (pckt.fPacketKindFlags & kUnformattedDrive)
+		{
+			kcout << "Disk is not formatted! (either in EPM or GPT...)\r";
+			return;
+		}
+
 #ifdef __AHCI__
 		drv_std_read(pckt.fPacketLba, (Char*)pckt.fPacketContent, kAHCISectorSize, pckt.fPacketSize);
 #elif defined(__ATA_PIO__) || defined(__ATA_DMA__)
@@ -44,7 +50,11 @@ namespace Kernel
 		if (pckt.fPacketReadOnly)
 			return;
 
-		kcout << "Writing blob to disk...\r";
+		if (pckt.fPacketKindFlags & kUnformattedDrive)
+		{
+			kcout << "Disk is not formatted! (either in EPM or GPT...)\r";
+			return;
+		}
 
 #ifdef __AHCI__
 		drv_std_write(pckt.fPacketLba, (Char*)pckt.fPacketContent, kAHCISectorSize, pckt.fPacketSize);
@@ -171,7 +181,7 @@ namespace Kernel
 				trait.fPacket.fPacketReadOnly = NO;
 				trait.fKind					  = kMassStorageDisc | kEPMDrive;
 
-				kcout << "Disk is EPM.\r";
+				kcout << "Disk is OpenEPM partitioned.\r";
 
 				trait.fSectorSz = block_struct.SectorSz;
 				trait.fLbaEnd	= block_struct.LbaEnd;
@@ -181,9 +191,11 @@ namespace Kernel
 					trait.fLbaEnd == 0 ||
 					trait.fSectorSz == 0)
 				{
-					ke_panic(RUNTIME_CHECK_FAILED, "Invalid EPM partition!");
+					ke_panic(RUNTIME_CHECK_FAILED, "Invalid OpenEPM partition!");
 				}
 			}
+			/// TODO: GPT disks and UFS partitions too.
+			/// right now we are just making it read only.
 			else
 			{
 				trait.fPacket.fPacketReadOnly = YES;
@@ -198,6 +210,8 @@ namespace Kernel
 			rt_copy_memory((VoidPtr) "*/*", trait.fPacket.fPacketMime,
 						   rt_string_len("*/*"));
 
+			// do save the kind of disk in the packet!
+			trait.fPacket.fPacketKindFlags = trait.fKind;
 			trait.fPacket.fPacketLba	 = 0;
 			trait.fPacket.fPacketSize	 = 0UL;
 			trait.fPacket.fPacketContent = nullptr;
