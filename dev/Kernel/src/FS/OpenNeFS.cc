@@ -4,7 +4,6 @@
 
 ------------------------------------------- */
 
-#include "KernelKit/DebugOutput.h"
 #ifdef __FSKIT_INCLUDES_NEFS__
 
 #include <FSKit/OpenNeFS.h>
@@ -59,26 +58,22 @@ STATIC MountpointInterface kMountpoint;
 /***********************************************************************************/
 /// @brief Creates a new fork inside the New filesystem partition.
 /// @param catalog it's catalog
-/// @param the_fork the fork itself.
+/// @param the_input_fork the fork itself.
 /// @return the fork
 /***********************************************************************************/
-_Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_fork)
+_Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_input_fork)
 {
-	if (the_fork.ForkName[0] != 0 &&
-		the_fork.CatalogName[0] != 0 &&
-		the_fork.DataSize > 0)
+	if (the_input_fork.ForkName[0] != 0 &&
+		the_input_fork.CatalogName[0] != 0 &&
+		the_input_fork.DataSize > 0)
 	{
-		auto catalog = this->GetCatalog(the_fork.CatalogName);
-
-		if (!catalog)
-			return NO;
+		auto catalog = this->GetCatalog(the_input_fork.CatalogName);
+		MUST_TRY(catalog); // still break on debug.
 
 		Lba lba = catalog->DataFork;
+		MUST_TRY(lba < kNeFSCatalogStartAddress);
 
 		kcout << "Fork LBA: " << hex_number(lba) << endl;
-
-		if (lba < kNeFSCatalogStartAddress)
-			return NO;
 
 		auto drv = kMountpoint.A();
 
@@ -103,8 +98,8 @@ _Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_fork)
 				kcout << "Fork already exists.\r";
 
 				/// sanity check.
-				if (StringBuilder::Equals(cur_fork.ForkName, the_fork.ForkName) &&
-					StringBuilder::Equals(cur_fork.CatalogName, the_fork.CatalogName))
+				if (StringBuilder::Equals(cur_fork.ForkName, the_input_fork.ForkName) &&
+					StringBuilder::Equals(cur_fork.CatalogName, the_input_fork.CatalogName))
 					break;
 
 				kcout << "Next fork: " << hex_number(cur_fork.NextSibling) << endl;
@@ -134,14 +129,14 @@ _Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_fork)
 			}
 		}
 
-		the_fork.Flags |= kNeFSFlagCreated;
-		the_fork.DataOffset		 = lba - sizeof(NFS_FORK_STRUCT);
-		the_fork.PreviousSibling = lba_prev;
-		the_fork.NextSibling	 = the_fork.DataOffset - the_fork.DataSize;
+		the_input_fork.Flags |= kNeFSFlagCreated;
+		the_input_fork.DataOffset		 = lba - sizeof(NFS_FORK_STRUCT);
+		the_input_fork.PreviousSibling = lba_prev;
+		the_input_fork.NextSibling	 = the_input_fork.DataOffset - the_input_fork.DataSize;
 
 		drv.fPacket.fPacketLba	   = lba;
 		drv.fPacket.fPacketSize	   = sizeof(NFS_FORK_STRUCT);
-		drv.fPacket.fPacketContent = &the_fork;
+		drv.fPacket.fPacketContent = &the_input_fork;
 
 		kcout << "Writing fork...\r";
 
@@ -150,7 +145,7 @@ _Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_fork)
 		fs_ifs_write(&kMountpoint, drv, MountpointInterface::kDriveIndexA);
 
 		/// log what we have now.
-		kcout << "Wrote fork data at: " << hex_number(the_fork.DataOffset)
+		kcout << "Wrote fork data at: " << hex_number(the_input_fork.DataOffset)
 			  << endl;
 
 		kcout << "Wrote fork at: " << hex_number(lba) << endl;
@@ -172,7 +167,7 @@ _Output NFS_FORK_STRUCT* NeFileSystemParser::FindFork(_Input NFS_CATALOG_STRUCT*
 													  Boolean					 isDataFork)
 {
 	auto			 drive	  = kMountpoint.A();
-	NFS_FORK_STRUCT* the_fork = nullptr;
+	NFS_FORK_STRUCT* the_input_fork = nullptr;
 
 	Lba lba = isDataFork ? catalog->DataFork : catalog->ResourceFork;
 
@@ -180,7 +175,7 @@ _Output NFS_FORK_STRUCT* NeFileSystemParser::FindFork(_Input NFS_CATALOG_STRUCT*
 	{
 		drive.fPacket.fPacketLba	 = lba;
 		drive.fPacket.fPacketSize	 = sizeof(NFS_FORK_STRUCT);
-		drive.fPacket.fPacketContent = (VoidPtr)the_fork;
+		drive.fPacket.fPacketContent = (VoidPtr)the_input_fork;
 
 		rt_copy_memory((VoidPtr) "fs/nefs-packet", drive.fPacket.fPacketMime, 16);
 
@@ -205,15 +200,15 @@ _Output NFS_FORK_STRUCT* NeFileSystemParser::FindFork(_Input NFS_CATALOG_STRUCT*
 			return nullptr;
 		}
 
-		if (StringBuilder::Equals(the_fork->ForkName, name))
+		if (StringBuilder::Equals(the_input_fork->ForkName, name))
 		{
 			break;
 		}
 
-		lba = the_fork->NextSibling;
+		lba = the_input_fork->NextSibling;
 	}
 
-	return the_fork;
+	return the_input_fork;
 }
 
 /***********************************************************************************/

@@ -126,6 +126,12 @@
 #define dbg_break_point() ((void)0)
 #endif
 
+#define MUST_TRY(EXPR) \ 
+		if ((EXPR) == NO) \
+		{ MUST_PASS(EXPR); return NO; }
+
+
+
 #define rtl_deduce_endianess(address, value)                    \
 	(((reinterpret_cast<Kernel::Char*>(address)[0]) == (value)) \
 		 ? (Kernel::Endian::kEndianBig)                         \
