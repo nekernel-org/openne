@@ -18,19 +18,19 @@
 #define kEPMMagicLength		 (5)
 
 /* @brief AMD64 magic for EPM */
-#define kEPMMagic86 " PMAM"
+#define kEPMMagic86 "EPMAM"
 
 /* @brief RISC-V magic for EPM */
-#define kEPMMagicRISCV " PMRV"
+#define kEPMMagicRISCV "EPMRV"
 
 /* @brief ARM magic for EPM */
-#define kEPMMagicARM " PMAR"
+#define kEPMMagicARM "EPMAR"
 
 /* @brief POWER magic for EPM */
-#define kEPMMagicPPC " PMPC"
+#define kEPMMagicPPC "EPMPC"
 
 /* @brief Invalid magic for EPM */
-#define kEPMMagicError " PM??"
+#define kEPMMagicError "EPM??"
 
 #ifdef __OPENNE_AMD64__
 #define kEPMMagic kEPMMagic86
