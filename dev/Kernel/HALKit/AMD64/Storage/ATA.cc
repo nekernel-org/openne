@@ -98,7 +98,7 @@ ATAInit_Retry:
 		kATAData[indexData] = Kernel::HAL::rt_in16(IO + ATA_REG_DATA);
 	}
 
-	OutBus = (Bus == ATA_PRIMARY_IO) ? ATA_PRIMARY_IO : ATA_SECONDARY_IO;
+	OutBus	  = (Bus == ATA_PRIMARY_IO) ? ATA_PRIMARY_IO : ATA_SECONDARY_IO;
 	OutMaster = (Bus == ATA_PRIMARY_IO) ? ATA_MASTER : ATA_SLAVE;
 
 	return true;
