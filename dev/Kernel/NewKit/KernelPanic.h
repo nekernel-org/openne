@@ -52,13 +52,3 @@ namespace Kernel
 {
 	void ke_panic(const Int32& id, const Char* message = nullptr);
 } // namespace Kernel
-
-#ifdef TRY
-#undef TRY
-#endif
-
-#define TRY(FN)           \
-	if (!FN())            \
-	{                     \
-		MUST_PASS(false); \
-	}
