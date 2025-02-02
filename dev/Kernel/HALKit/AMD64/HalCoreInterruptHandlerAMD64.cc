@@ -1,6 +1,6 @@
 /* -------------------------------------------
 
-	Copyright (C) 2024, Amlal EL Mahrouss, all rights reserved.
+	Copyright (C) 2024-2025, Amlal EL Mahrous, all rights reserved.
 
 ------------------------------------------- */
 
@@ -28,7 +28,7 @@ EXTERN_C void idt_handle_gpf(Kernel::UIntPtr rsp)
 	process.Leak().ProcessSignal.SignalID		= SIGKILL;
 	process.Leak().ProcessSignal.PreviousStatus = process.Leak().Status;
 
-	kcout << "Kernel: PRCFROZE status set..\r";
+	kcout << "Kernel: SIGKILL.\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
 
@@ -53,7 +53,7 @@ EXTERN_C void idt_handle_pf(Kernel::UIntPtr rsp)
 	process.Leak().ProcessSignal.SignalID		= SIGKILL;
 	process.Leak().ProcessSignal.PreviousStatus = process.Leak().Status;
 
-	kcout << "Kernel: PRCFROZE status set..\r";
+	kcout << "Kernel: SIGKILL.\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
 
@@ -93,13 +93,13 @@ EXTERN_C void idt_handle_math(Kernel::UIntPtr rsp)
 
 	kIsScheduling = NO;
 
-	kcout << "Kernel: Math error (division by zero?).\r";
+	kcout << "Kernel: Math error (division by zero?)\r";
 
 	process.Leak().ProcessSignal.SignalIP		= 0UL;
 	process.Leak().ProcessSignal.SignalID		= SIGKILL;
 	process.Leak().ProcessSignal.PreviousStatus = process.Leak().Status;
 
-	kcout << "Kernel: PRCFROZE status set..\r";
+	kcout << "Kernel: SIGKILL.\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
 
@@ -123,7 +123,7 @@ EXTERN_C void idt_handle_generic(Kernel::UIntPtr rsp)
 	process.Leak().ProcessSignal.SignalID		= SIGKILL;
 	process.Leak().ProcessSignal.PreviousStatus = process.Leak().Status;
 
-	kcout << "Kernel: PRCFROZE status set..\r";
+	kcout << "Kernel: SIGKILL.\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
 
@@ -139,15 +139,15 @@ EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rip)
 
 	kIsScheduling = NO;
 
-	kcout << "Kernel: Process RIP: " << Kernel::hex_number(rip) << endl;
-	kcout << "Kernel: SIGTRAP set.\r";
+	kcout << "Kernel: RCX: " << Kernel::hex_number(rip) << endl;
+	kcout << "Kernel: SIGTRAP.\r";
 
 	process.Leak().ProcessSignal.SignalIP = rip;
 	process.Leak().ProcessSignal.SignalID = SIGTRAP;
 
 	process.Leak().ProcessSignal.PreviousStatus = process.Leak().Status;
 
-	kcout << "Kernel: PRCFROZE status set..\r";
+	kcout << "Kernel: SIGKILL.\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kFrozen;
 
@@ -171,7 +171,7 @@ EXTERN_C void idt_handle_ud(Kernel::UIntPtr rsp)
 	process.Leak().ProcessSignal.SignalID		= SIGKILL;
 	process.Leak().ProcessSignal.PreviousStatus = process.Leak().Status;
 
-	kcout << "Kernel: PRCFROZE status set..\r";
+	kcout << "Kernel: SIGKILL.\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kKilled;
 
