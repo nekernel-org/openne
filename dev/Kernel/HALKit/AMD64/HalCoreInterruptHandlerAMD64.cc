@@ -151,7 +151,7 @@ EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rip)
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kFrozen;
 
-	while (YES);
+	while (YES); /// TODO: Find fix for that.
 }
 
 /// @brief Handle #UD fault.
