@@ -29,12 +29,6 @@ namespace Kernel
 	/// @return
 	Void io_drv_input(DriveTrait::DrivePacket pckt)
 	{
-		if (pckt.fPacketKindFlags & kUnformattedDrive)
-		{
-			kcout << "Disk is not formatted! (either in EPM or GPT...)\r";
-			return;
-		}
-
 #ifdef __AHCI__
 		drv_std_read(pckt.fPacketLba, (Char*)pckt.fPacketContent, kAHCISectorSize, pckt.fPacketSize);
 #elif defined(__ATA_PIO__) || defined(__ATA_DMA__)
@@ -49,12 +43,6 @@ namespace Kernel
 	{
 		if (pckt.fPacketReadOnly)
 			return;
-
-		if (pckt.fPacketKindFlags & kUnformattedDrive)
-		{
-			kcout << "Disk is not formatted! (either in EPM or GPT...)\r";
-			return;
-		}
 
 #ifdef __AHCI__
 		drv_std_write(pckt.fPacketLba, (Char*)pckt.fPacketContent, kAHCISectorSize, pckt.fPacketSize);
@@ -165,14 +153,14 @@ namespace Kernel
 		{
 			EPM_PART_BLOCK block_struct;
 
+			trait.fInit(trait.fPacket);
+
 			trait.fPacket.fPacketLba	 = kEPMBootBlockLba;
 			trait.fPacket.fPacketSize	 = sizeof(EPM_PART_BLOCK);
 			trait.fPacket.fPacketContent = &block_struct;
 
 			rt_copy_memory((VoidPtr) "fs/detect-packet", trait.fPacket.fPacketMime,
 						   rt_string_len("fs/detect-packet"));
-
-			trait.fInit(trait.fPacket);
 
 			trait.fInput(trait.fPacket);
 
@@ -181,7 +169,7 @@ namespace Kernel
 				trait.fPacket.fPacketReadOnly = NO;
 				trait.fKind					  = kMassStorageDisc | kEPMDrive;
 
-				kcout << "Disk is OpenEPM partitioned.\r";
+				kcout << "Disk is EPM partitioned.\r";
 
 				trait.fSectorSz = block_struct.SectorSz;
 				trait.fLbaEnd	= block_struct.LbaEnd;
@@ -191,7 +179,7 @@ namespace Kernel
 					trait.fLbaEnd == 0 ||
 					trait.fSectorSz == 0)
 				{
-					ke_panic(RUNTIME_CHECK_FAILED, "Invalid OpenEPM partition!");
+					ke_panic(RUNTIME_CHECK_FAILED, "Invalid EPM partition!");
 				}
 			}
 			/// TODO: GPT disks and UFS partitions too.
@@ -212,9 +200,9 @@ namespace Kernel
 
 			// do save the kind of disk in the packet!
 			trait.fPacket.fPacketKindFlags = trait.fKind;
-			trait.fPacket.fPacketLba	 = 0;
-			trait.fPacket.fPacketSize	 = 0UL;
-			trait.fPacket.fPacketContent = nullptr;
+			trait.fPacket.fPacketLba	   = 0;
+			trait.fPacket.fPacketSize	   = 0UL;
+			trait.fPacket.fPacketContent   = nullptr;
 		}
 	} // namespace Detect
 

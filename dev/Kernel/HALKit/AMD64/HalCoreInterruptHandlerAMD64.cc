@@ -150,6 +150,8 @@ EXTERN_C Kernel::Void idt_handle_breakpoint(Kernel::UIntPtr rip)
 	kcout << "Kernel: PRCFROZE status set..\r";
 
 	process.Leak().Status = Kernel::ProcessStatusKind::kFrozen;
+
+	while (YES);
 }
 
 /// @brief Handle #UD fault.

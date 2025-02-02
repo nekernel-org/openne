@@ -11,7 +11,7 @@
 #endif
 
 #ifndef kib_cast
-#define kib_cast(X) (Kernel::UInt64)((X) * 1024)
+#define kib_cast(X) (Kernel::UInt64)((X)*1024)
 #endif
 
 #ifndef MIB
@@ -113,7 +113,7 @@
 
 #define CONST const
 
-#define STRINGIFY(X)  #X
+#define STRINGIFY(X)	 #X
 #define OPENNE_UNUSED(X) ((Kernel::Void)X)
 
 #ifndef RGB
@@ -127,9 +127,14 @@
 #endif
 
 /// @brief A simple try and die macro.
-#define MUST_TRY(EXPR) if (!(EXPR)) { MUST_PASS(EXPR); return NO; }
+#define MUST_TRY(EXPR)   \
+	if (!(EXPR))         \
+	{                    \
+		MUST_PASS(EXPR); \
+		return NO;       \
+	}
 
-#define RTL_ENDIAN(address, value)                    \
+#define RTL_ENDIAN(address, value)                              \
 	(((reinterpret_cast<Kernel::Char*>(address)[0]) == (value)) \
 		 ? (Kernel::Endian::kEndianBig)                         \
 		 : (Kernel::Endian::kEndianLittle))

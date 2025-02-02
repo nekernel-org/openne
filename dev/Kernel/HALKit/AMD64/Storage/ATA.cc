@@ -37,18 +37,18 @@ Boolean drv_std_wait_io(UInt16 IO)
 		rt_in8(IO + ATA_REG_STATUS);
 
 ATAWaitForIO_Retry:
-	auto rdy = rt_in8(IO + ATA_REG_STATUS);
+	auto statRdy = rt_in8(IO + ATA_REG_STATUS);
 
-	if ((rdy & ATA_SR_BSY))
+	if ((statRdy & ATA_SR_BSY))
 		goto ATAWaitForIO_Retry;
 
 ATAWaitForIO_Retry2:
-	rdy = rt_in8(IO + ATA_REG_STATUS);
+	statRdy = rt_in8(IO + ATA_REG_STATUS);
 
-	if (rdy & ATA_SR_ERR)
+	if (statRdy & ATA_SR_ERR)
 		return false;
 
-	if (!(rdy & ATA_SR_DRDY))
+	if (!(statRdy & ATA_SR_DRDY))
 		goto ATAWaitForIO_Retry2;
 
 	return true;
@@ -64,30 +64,27 @@ Void drv_std_select(UInt16 Bus)
 
 Boolean drv_std_init(UInt16 Bus, UInt8 Drive, UInt16& OutBus, UInt8& OutMaster)
 {
+	if (drv_std_detected())
+		return true;
+
 	UInt16 IO = Bus;
 
 	drv_std_select(IO);
 
-ATAInit_Retry:
 	// Bus init, NEIN bit.
 	rt_out8(IO + ATA_REG_NEIN, 1);
 
-	// identify until it's good
+	// identify until it's good.
+ATAInit_Retry:
+	auto statRdy = rt_in8(IO + ATA_REG_STATUS);
 
-	auto rdy = rt_in8(IO + ATA_REG_STATUS);
-
-	if (rdy & ATA_SR_ERR)
+	if (statRdy & ATA_SR_ERR)
 	{
-		kcout << "ATA Error, aborting...\r";
-
 		return false;
 	}
 
-	if ((rdy & ATA_SR_BSY))
-	{
-		kcout << "Retrying as controller is busy...\r";
+	if ((statRdy & ATA_SR_BSY))
 		goto ATAInit_Retry;
-	}
 
 	rt_out8(IO + ATA_REG_COMMAND, ATA_CMD_IDENTIFY);
 
@@ -98,14 +95,13 @@ ATAInit_Retry:
 
 	for (SizeT indexData = 0ul; indexData < kATADataLen; ++indexData)
 	{
-		kATAData[indexData] = rt_in16(IO + ATA_REG_DATA);
+		kATAData[indexData] = Kernel::HAL::rt_in16(IO + ATA_REG_DATA);
 	}
 
 	OutBus = (Bus == ATA_PRIMARY_IO) ? ATA_PRIMARY_IO : ATA_SECONDARY_IO;
-
 	OutMaster = (Bus == ATA_PRIMARY_IO) ? ATA_MASTER : ATA_SLAVE;
 
-	return YES;
+	return true;
 }
 
 Void drv_std_read(UInt64 Lba, UInt16 IO, UInt8 Master, Char* Buf, SizeT SectorSz, SizeT Size)
@@ -121,7 +117,7 @@ Void drv_std_read(UInt64 Lba, UInt16 IO, UInt8 Master, Char* Buf, SizeT SectorSz
 
 	rt_out8(IO + ATA_REG_SEC_COUNT0, ((Size + SectorSz) / SectorSz));
 
-	rt_out8(IO + ATA_REG_LBA0, (Lba) & 0xFF);
+	rt_out8(IO + ATA_REG_LBA0, (Lba)&0xFF);
 	rt_out8(IO + ATA_REG_LBA1, (Lba) >> 8);
 	rt_out8(IO + ATA_REG_LBA2, (Lba) >> 16);
 	rt_out8(IO + ATA_REG_LBA3, (Lba) >> 24);
@@ -133,11 +129,9 @@ Void drv_std_read(UInt64 Lba, UInt16 IO, UInt8 Master, Char* Buf, SizeT SectorSz
 	for (SizeT IndexOff = 0; IndexOff < Size; ++IndexOff)
 	{
 		drv_std_wait_io(IO);
-		Buf[IndexOff] = rt_in16(IO + ATA_REG_DATA);
+		Buf[IndexOff] = Kernel::HAL::rt_in16(IO + ATA_REG_DATA);
 		drv_std_wait_io(IO);
 	}
-
-	drv_std_wait_io(IO);
 }
 
 Void drv_std_write(UInt64 Lba, UInt16 IO, UInt8 Master, Char* Buf, SizeT SectorSz, SizeT Size)
@@ -153,7 +147,7 @@ Void drv_std_write(UInt64 Lba, UInt16 IO, UInt8 Master, Char* Buf, SizeT SectorS
 
 	rt_out8(IO + ATA_REG_SEC_COUNT0, ((Size + (SectorSz)) / SectorSz));
 
-	rt_out8(IO + ATA_REG_LBA0, (Lba) & 0xFF);
+	rt_out8(IO + ATA_REG_LBA0, (Lba)&0xFF);
 	rt_out8(IO + ATA_REG_LBA1, (Lba) >> 8);
 	rt_out8(IO + ATA_REG_LBA2, (Lba) >> 16);
 	rt_out8(IO + ATA_REG_LBA3, (Lba) >> 24);

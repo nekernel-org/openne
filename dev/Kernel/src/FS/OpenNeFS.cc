@@ -130,9 +130,9 @@ _Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_input_fo
 		}
 
 		the_input_fork.Flags |= kNeFSFlagCreated;
-		the_input_fork.DataOffset		 = lba - sizeof(NFS_FORK_STRUCT);
+		the_input_fork.DataOffset	   = lba - sizeof(NFS_FORK_STRUCT);
 		the_input_fork.PreviousSibling = lba_prev;
-		the_input_fork.NextSibling	 = the_input_fork.DataOffset - the_input_fork.DataSize;
+		the_input_fork.NextSibling	   = the_input_fork.DataOffset - the_input_fork.DataSize;
 
 		drv.fPacket.fPacketLba	   = lba;
 		drv.fPacket.fPacketSize	   = sizeof(NFS_FORK_STRUCT);
@@ -163,10 +163,10 @@ _Output BOOL NeFileSystemParser::CreateFork(_Input NFS_FORK_STRUCT& the_input_fo
 /// @return the fork.
 /***********************************************************************************/
 _Output NFS_FORK_STRUCT* NeFileSystemParser::FindFork(_Input NFS_CATALOG_STRUCT* catalog,
-													  _Input const Char*		 name,
-													  Boolean					 isDataFork)
+													  _Input const Char* name,
+													  Boolean			 isDataFork)
 {
-	auto			 drive	  = kMountpoint.A();
+	auto			 drive			= kMountpoint.A();
 	NFS_FORK_STRUCT* the_input_fork = nullptr;
 
 	Lba lba = isDataFork ? catalog->DataFork : catalog->ResourceFork;
@@ -229,7 +229,7 @@ _Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*
 /// @param kind the catalog kind.
 /// @return catalog pointer.
 /***********************************************************************************/
-_Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char*  name,
+_Output NFS_CATALOG_STRUCT* NeFileSystemParser::CreateCatalog(_Input const Char* name,
 															  _Input const Int32& flags,
 															  _Input const Int32& kind)
 {
@@ -938,7 +938,7 @@ Boolean NeFileSystemParser::RemoveCatalog(_Input const Char* catalog_name)
 VoidPtr NeFileSystemParser::ReadCatalog(_Input _Output NFS_CATALOG_STRUCT* catalog,
 										_Input Bool						   is_rsrc_fork,
 										_Input SizeT					   dataSz,
-										_Input const Char*				   forkName)
+										_Input const Char* forkName)
 {
 	if (!catalog)
 	{

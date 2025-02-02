@@ -163,7 +163,7 @@ namespace Kernel
 		/// @return a new bitmap allocated pointer.
 		auto mm_alloc_bitmap(Boolean wr, Boolean user, SizeT size, Bool is_page) -> VoidPtr
 		{
-			VoidPtr					 ptr_new = nullptr;
+			VoidPtr ptr_new = nullptr;
 
 			Detail::IBitMapProxy proxy;
 			ptr_new = proxy.FindBitMap(kKernelBitMpStart, size, wr, user);
@@ -180,7 +180,7 @@ namespace Kernel
 				return No;
 
 			Detail::IBitMapProxy proxy;
-			Bool					 ret = proxy.FreeBitMap(ptr);
+			Bool				 ret = proxy.FreeBitMap(ptr);
 
 			return ret;
 		}
