@@ -189,7 +189,7 @@ Kernel::SizeT drv_get_sector_count()
 /// @brief Get the drive size.
 Kernel::SizeT drv_get_size()
 {
-	return (drv_get_sector_count()) * kATASectorSize;
+	return (drv_get_sector_count()) * ATA_SECTOR_SZ;
 }
 
 #endif /* ifdef __ATA_PIO__ */

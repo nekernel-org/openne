@@ -9,6 +9,8 @@
 #include <Mod/ATA/ATA.h>
 #include <Mod/AHCI/AHCI.h>
 
+#include <CompilerKit/CompilerKit.h>
+
 using namespace Kernel;
 
 /// @brief Device type.

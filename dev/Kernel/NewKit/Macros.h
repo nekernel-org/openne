@@ -127,7 +127,7 @@
 #endif
 
 /// @brief A simple try and die macro.
-#define MUST_TRY(EXPR) if ((EXPR) == NO) { MUST_PASS(EXPR); return NO; }
+#define MUST_TRY(EXPR) if (!(EXPR)) { MUST_PASS(EXPR); return NO; }
 
 #define RTL_ENDIAN(address, value)                    \
 	(((reinterpret_cast<Kernel::Char*>(address)[0]) == (value)) \

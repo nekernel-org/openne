@@ -27,7 +27,7 @@ public:
 
 	enum
 	{
-		kSectorSize = kATASectorSize
+		kSectorSize = ATA_SECTOR_SZ
 	};
 
 	struct ATATrait final : public Device::Trait

@@ -121,7 +121,7 @@
 ///! ATA command register.
 #define ATA_COMMAND(x) (x + 7)
 
-#define kATASectorSize (512U)
+#define ATA_SECTOR_SZ (512U)
 
 enum
 {
@@ -152,5 +152,5 @@ Kernel::SizeT drv_get_sector_count();
 /// @brief get device size.
 Kernel::SizeT drv_get_size();
 
-#endif // ifdef __MINOSKRNL__
-#endif // ifndef __ATA_PIO__ || __AHCI__
+#endif // ifdef __NEOSKRNL__
+#endif // ifndef __AHCI__

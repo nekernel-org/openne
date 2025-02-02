@@ -37,6 +37,7 @@ STATIC EfiGraphicsOutputProtocol* kGop		 = nullptr;
 STATIC UInt16					  kGopStride = 0U;
 STATIC EfiGUID					  kGopGuid;
 
+/** Vector reset. */
 EXTERN_C Void rt_reset_hardware();
 
 EXTERN EfiBootServices* BS;
@@ -71,8 +72,6 @@ STATIC Bool boot_init_fb() noexcept
 
 	return No;
 }
-
-EXTERN EfiBootServices* BS;
 
 /// @brief Main EFI entrypoint.
 /// @param image_handle Handle of this image.

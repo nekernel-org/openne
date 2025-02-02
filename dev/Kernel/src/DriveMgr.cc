@@ -38,7 +38,7 @@ namespace Kernel
 #ifdef __AHCI__
 		drv_std_read(pckt.fPacketLba, (Char*)pckt.fPacketContent, kAHCISectorSize, pckt.fPacketSize);
 #elif defined(__ATA_PIO__) || defined(__ATA_DMA__)
-		drv_std_read(pckt.fPacketLba, kATAIO, kATAMaster, (Char*)pckt.fPacketContent, kATASectorSize, pckt.fPacketSize);
+		drv_std_read(pckt.fPacketLba, kATAIO, kATAMaster, (Char*)pckt.fPacketContent, ATA_SECTOR_SZ, pckt.fPacketSize);
 #endif
 	}
 
@@ -59,7 +59,7 @@ namespace Kernel
 #ifdef __AHCI__
 		drv_std_write(pckt.fPacketLba, (Char*)pckt.fPacketContent, kAHCISectorSize, pckt.fPacketSize);
 #elif defined(__ATA_PIO__) || defined(__ATA_DMA__)
-		drv_std_write(pckt.fPacketLba, kATAIO, kATAMaster, (Char*)pckt.fPacketContent, kATASectorSize, pckt.fPacketSize);
+		drv_std_write(pckt.fPacketLba, kATAIO, kATAMaster, (Char*)pckt.fPacketContent, ATA_SECTOR_SZ, pckt.fPacketSize);
 #endif
 	}
 

@@ -6,7 +6,7 @@
 -Idev/Boot/BootKit
 -std=c++20
 -D__OPENNE_AMD64__
--D__MINOSKRNL__
+-D__NEOSKRNL__
 -D__FSKIT_INCLUDES_NEFS__
 -D__OPENNE_ED__
 -xc++
@@ -14,3 +14,4 @@
 -D__x86_64__
 -D__aarch64__
 -DOPENNE_USE_MBCI_FLASH
+-D__ATA_PIO__
